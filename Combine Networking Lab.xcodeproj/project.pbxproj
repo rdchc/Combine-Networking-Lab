@@ -99,13 +99,9 @@
 		5E149A2826649D7B00B660B3 /* Combine Networking Lab */ = {
 			isa = PBXGroup;
 			children = (
-				5E149A2926649D7B00B660B3 /* AppDelegate.swift */,
-				5E149A2B26649D7B00B660B3 /* SceneDelegate.swift */,
-				5E149A2D26649D7B00B660B3 /* ViewController.swift */,
-				5E149A2F26649D7B00B660B3 /* Main.storyboard */,
-				5E149A3226649D7E00B660B3 /* Assets.xcassets */,
-				5E149A3426649D7E00B660B3 /* LaunchScreen.storyboard */,
-				5E149A3726649D7E00B660B3 /* Info.plist */,
+				5E149A5A26649F0200B660B3 /* App */,
+				5E149A5C26649F3900B660B3 /* Views */,
+				5E149A5B26649F1700B660B3 /* Supporting Files */,
 			);
 			path = "Combine Networking Lab";
 			sourceTree = "<group>";
@@ -126,6 +122,34 @@
 				5E149A4D26649D7F00B660B3 /* Info.plist */,
 			);
 			path = "Combine Networking LabUITests";
+			sourceTree = "<group>";
+		};
+		5E149A5A26649F0200B660B3 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				5E149A2926649D7B00B660B3 /* AppDelegate.swift */,
+				5E149A2B26649D7B00B660B3 /* SceneDelegate.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		5E149A5B26649F1700B660B3 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				5E149A3226649D7E00B660B3 /* Assets.xcassets */,
+				5E149A3426649D7E00B660B3 /* LaunchScreen.storyboard */,
+				5E149A3726649D7E00B660B3 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		5E149A5C26649F3900B660B3 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				5E149A2F26649D7B00B660B3 /* Main.storyboard */,
+				5E149A2D26649D7B00B660B3 /* ViewController.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
