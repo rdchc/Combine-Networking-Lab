@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -15,6 +15,8 @@
 		5E149A3626649D7E00B660B3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5E149A3426649D7E00B660B3 /* LaunchScreen.storyboard */; };
 		5E149A4126649D7F00B660B3 /* Combine_Networking_LabTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E149A4026649D7F00B660B3 /* Combine_Networking_LabTests.swift */; };
 		5E149A4C26649D7F00B660B3 /* Combine_Networking_LabUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E149A4B26649D7F00B660B3 /* Combine_Networking_LabUITests.swift */; };
+		5E149A612664B80B00B660B3 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 5E149A602664B80B00B660B3 /* Then */; };
+		5E149A662664BCEC00B660B3 /* TinyConstraints in Frameworks */ = {isa = PBXBuildFile; productRef = 5E149A652664BCEC00B660B3 /* TinyConstraints */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +58,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5E149A612664B80B00B660B3 /* Then in Frameworks */,
+				5E149A662664BCEC00B660B3 /* TinyConstraints in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -168,6 +172,10 @@
 			dependencies = (
 			);
 			name = "Combine Networking Lab";
+			packageProductDependencies = (
+				5E149A602664B80B00B660B3 /* Then */,
+				5E149A652664BCEC00B660B3 /* TinyConstraints */,
+			);
 			productName = "Combine Networking Lab";
 			productReference = 5E149A2626649D7B00B660B3 /* Combine Networking Lab.app */;
 			productType = "com.apple.product-type.application";
@@ -239,6 +247,10 @@
 				Base,
 			);
 			mainGroup = 5E149A1D26649D7B00B660B3;
+			packageReferences = (
+				5E149A5F2664B80B00B660B3 /* XCRemoteSwiftPackageReference "Then" */,
+				5E149A642664BCEC00B660B3 /* XCRemoteSwiftPackageReference "TinyConstraints" */,
+			);
 			productRefGroup = 5E149A2726649D7B00B660B3 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -617,6 +629,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		5E149A5F2664B80B00B660B3 /* XCRemoteSwiftPackageReference "Then" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/devxoul/Then";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.7.0;
+			};
+		};
+		5E149A642664BCEC00B660B3 /* XCRemoteSwiftPackageReference "TinyConstraints" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/roberthein/TinyConstraints.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		5E149A602664B80B00B660B3 /* Then */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5E149A5F2664B80B00B660B3 /* XCRemoteSwiftPackageReference "Then" */;
+			productName = Then;
+		};
+		5E149A652664BCEC00B660B3 /* TinyConstraints */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5E149A642664BCEC00B660B3 /* XCRemoteSwiftPackageReference "TinyConstraints" */;
+			productName = TinyConstraints;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 5E149A1E26649D7B00B660B3 /* Project object */;
 }
