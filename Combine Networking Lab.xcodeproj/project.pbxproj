@@ -17,6 +17,7 @@
 		5E149A4C26649D7F00B660B3 /* Combine_Networking_LabUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E149A4B26649D7F00B660B3 /* Combine_Networking_LabUITests.swift */; };
 		5E149A612664B80B00B660B3 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 5E149A602664B80B00B660B3 /* Then */; };
 		5E149A662664BCEC00B660B3 /* TinyConstraints in Frameworks */ = {isa = PBXBuildFile; productRef = 5E149A652664BCEC00B660B3 /* TinyConstraints */; };
+		5E149A682664BCFE00B660B3 /* ItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E149A672664BCFE00B660B3 /* ItemView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,7 @@
 		5E149A4726649D7F00B660B3 /* Combine Networking LabUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Combine Networking LabUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E149A4B26649D7F00B660B3 /* Combine_Networking_LabUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Combine_Networking_LabUITests.swift; sourceTree = "<group>"; };
 		5E149A4D26649D7F00B660B3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5E149A672664BCFE00B660B3 /* ItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -152,6 +154,7 @@
 			children = (
 				5E149A2F26649D7B00B660B3 /* Main.storyboard */,
 				5E149A2D26649D7B00B660B3 /* ViewController.swift */,
+				5E149A672664BCFE00B660B3 /* ItemView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -297,6 +300,7 @@
 				5E149A2E26649D7B00B660B3 /* ViewController.swift in Sources */,
 				5E149A2A26649D7B00B660B3 /* AppDelegate.swift in Sources */,
 				5E149A2C26649D7B00B660B3 /* SceneDelegate.swift in Sources */,
+				5E149A682664BCFE00B660B3 /* ItemView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

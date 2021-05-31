@@ -20,7 +20,7 @@ This section lists out the main objectives of this lab project.
 
 This section enumerates some actual tasks for the project.
 
-- [ ] Design and implement user interfaces
+- [X] Design and implement user interfaces
 
 - [ ] Create mock requests using asynchronous tasks
 
