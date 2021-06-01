@@ -22,22 +22,23 @@ class ItemView: UIView {
   private lazy var hStackView1 = UIStackView(arrangedSubviews: [titleLabel, infoButton])
   private lazy var hStackView2 = UIStackView(arrangedSubviews: [statusLabel, fetchButton, cancelButton])
   private lazy var vStackView = UIStackView(arrangedSubviews: [hStackView1, hStackView2])
-  private let insets: UIEdgeInsets = .uniform(12)
+  let insets: UIEdgeInsets = .uniform(12)
   
-  @Published var title: String?
-  @Published var status: String?
-  @Published var infoText: String?
-  @Published var isFetching: Bool = false
-  @Published var cancellable: Bool = false
+  var viewModel: ItemViewModel
   private var subscriptions = Set<AnyCancellable>()
-  
-  private let showInfoSubject = PassthroughSubject<String?, Never>()
-  var showInfoPublisher: AnyPublisher<String?, Never> { showInfoSubject.eraseToAnyPublisher() }
   
   
   // MARK: - Methods
   
   override init(frame: CGRect) {
+    viewModel = ItemViewModel()
+    super.init(frame: frame)
+    setupViews()
+    setupBindings()
+  }
+  
+  init(frame: CGRect = .zero, viewModel: ItemViewModel) {
+    self.viewModel = viewModel
     super.init(frame: frame)
     setupViews()
     setupBindings()
@@ -69,7 +70,7 @@ class ItemView: UIView {
       $0.setImage(UIImage(systemName: "info.circle"), for: .normal)
       $0.addAction(.init(handler: { [weak self] _ in
         guard let self = self else { return }
-        self.showInfoSubject.send(self.infoText)
+        self.viewModel.showInfo()
       }), for: .touchUpInside)
     }
     
@@ -101,11 +102,11 @@ class ItemView: UIView {
   }
   
   private func setupBindings() {
-    $title
+    viewModel.$title
       .assign(to: \.text, on: titleLabel)
       .store(in: &subscriptions)
     
-    $infoText
+    viewModel.$infoText
       .map {
         guard let info = $0 else { return false }
         return !info.isEmpty
@@ -113,16 +114,16 @@ class ItemView: UIView {
       .assign(to: \.isEnabled, on: infoButton)
       .store(in: &subscriptions)
     
-    $status
+    viewModel.$status
       .assign(to: \.text, on: statusLabel)
       .store(in: &subscriptions)
     
-    $isFetching
+    viewModel.$isFetching
       .map { !$0 }
       .assign(to: \.isEnabled, on: fetchButton)
       .store(in: &subscriptions)
     
-    $cancellable
+    viewModel.$cancellable
       .assign(to: \.isEnabled, on: cancelButton)
       .store(in: &subscriptions)
   }

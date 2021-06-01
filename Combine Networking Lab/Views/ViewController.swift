@@ -16,7 +16,7 @@ class ViewController: UIViewController {
   private let scrollContentView = UIView()
   private let stackView = UIStackView()
   
-  let sampleItemView = ItemView()
+  var itemViewModel0 = ItemViewModel()
   
   private var subscriptions = Set<AnyCancellable>()
   
@@ -47,20 +47,21 @@ class ViewController: UIViewController {
       $0.edgesToSuperview()
     }
     
-    setupItemView(sampleItemView, title: "Sample Item View", info: "A sample view for UI implementations")
-  }
-  
-  private func setupItemView(_ itemView: ItemView, title: String?, info: String? = nil) {
-    itemView.title = title
-    itemView.infoText = info
-    stackView.addArrangedSubview(itemView)
-    itemView.showInfoPublisher
-      .sink { [weak self] info in
-        let alert = UIAlertController(title: "Info", message: info, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        self?.present(alert, animated: true, completion: nil)
+    // Sample item view
+    itemViewModel0.do {
+      $0.title = "Sample Item View"
+      $0.infoText = "A sample view for UI implementations"
+      $0.showInfoPublisher
+        .sink { [weak self] info in
+          let alert = UIAlertController(title: "Info", message: info, preferredStyle: .alert)
+          alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+          self?.present(alert, animated: true, completion: nil)
+        }
+        .store(in: &subscriptions)
+      ItemView(viewModel: $0).do { v in
+        stackView.addArrangedSubview(v)
       }
-      .store(in: &subscriptions)
+    }
   }
 
 }
