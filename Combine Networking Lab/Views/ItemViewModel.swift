@@ -19,7 +19,7 @@ class ItemViewModel {
   
   @Published var title: String?
   @Published var status: Status?
-  @Published var infoText: String?
+  @Published var showError: Bool = false
   @Published var cancellable: Bool = false
   
   private var fetchSubscription: AnyCancellable?
@@ -27,11 +27,6 @@ class ItemViewModel {
   
   private let apiClient: MockApiClient
   private let queue = DispatchQueue(label: "mock-vm")
-  
-  private let showInfoSubject = PassthroughSubject<String?, Never>()
-  var showInfoPublisher: AnyPublisher<String?, Never> {
-    showInfoSubject.eraseToAnyPublisher()
-  }
   
   init() {
     apiClient = MockApiClient(error: nil)
@@ -42,14 +37,15 @@ class ItemViewModel {
     $status
       .map { $0 == .fetching }
       .assign(to: &$cancellable)
+    
+    $showError
+      .map { $0 ? MockApiClient.Error.mockError : nil }
+      .assign(to: \.error, on: apiClient)
+      .store(in: &subscriptions)
   }
   
   
   // MARK: - External methods
-  
-  func showInfo() {
-    showInfoSubject.send(infoText)
-  }
   
   func fetch() {
     status = .fetching

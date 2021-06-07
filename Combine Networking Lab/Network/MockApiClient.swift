@@ -13,7 +13,7 @@ class MockApiClient {
     case mockError
   }
   
-  let error: Error?
+  var error: Error?
   private let delay: TimeInterval = 2
   
   init(error: Error?) {

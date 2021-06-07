@@ -18,6 +18,7 @@ class ViewController: UIViewController {
   
   var itemViewModel0 = ItemViewModel()
   
+  private let showInfoSubject = PassthroughSubject<String, Never>()
   private var subscriptions = Set<AnyCancellable>()
   
   
@@ -27,6 +28,7 @@ class ViewController: UIViewController {
     super.viewDidLoad()
     // Do any additional setup after loading the view.
     setupViews()
+    setupBindings()
   }
   
   private func setupViews() {
@@ -48,20 +50,42 @@ class ViewController: UIViewController {
     }
     
     // Sample item view
-    itemViewModel0.do {
-      $0.title = "Sample Item View"
-      $0.infoText = "A sample view for UI implementations"
-      $0.showInfoPublisher
-        .sink { [weak self] info in
-          let alert = UIAlertController(title: "Info", message: info, preferredStyle: .alert)
-          alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-          self?.present(alert, animated: true, completion: nil)
+    itemViewModel0.do { vm in
+      vm.title = "Sample Item View"
+      
+      // Commented for example code.
+      // TODO: Remove when other item view use below code
+//      let infoBtn = UIButton(type: .system, primaryAction: .init(handler: { [weak self] _ in
+//        guard let self = self else { return }
+//        self.showInfoSubject.send("A sample view for UI implementations")
+//      })).then { btn in
+//        btn.setImage(UIImage(systemName: "info.circle"), for: .normal)
+//      }
+      
+      let errorSwitch = UISwitch(frame: .zero, primaryAction: .init(handler: { action in
+        guard let sender = action.sender as? UISwitch else { return }
+        vm.showError = sender.isOn
+      }))
+      let errorLabel = UILabel().then {
+        $0.text = "Toggle error"
+      }
+      ItemView(viewModel: vm).do { v in
+        [errorSwitch, errorLabel].forEach { subview in
+          v.customStackView.addArrangedSubview(subview)
         }
-        .store(in: &subscriptions)
-      ItemView(viewModel: $0).do { v in
         stackView.addArrangedSubview(v)
       }
     }
+  }
+  
+  private func setupBindings() {
+    showInfoSubject
+      .sink { [weak self] info in
+        let alert = UIAlertController(title: "Info", message: info, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        self?.present(alert, animated: true, completion: nil)
+      }
+      .store(in: &subscriptions)
   }
 
 }
