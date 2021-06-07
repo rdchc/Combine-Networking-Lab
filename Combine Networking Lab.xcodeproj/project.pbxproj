@@ -19,6 +19,7 @@
 		5E149A662664BCEC00B660B3 /* TinyConstraints in Frameworks */ = {isa = PBXBuildFile; productRef = 5E149A652664BCEC00B660B3 /* TinyConstraints */; };
 		5E149A682664BCFE00B660B3 /* ItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E149A672664BCFE00B660B3 /* ItemView.swift */; };
 		5E5F0FFC2665FA990016B91D /* ItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E5F0FFB2665FA990016B91D /* ItemViewModel.swift */; };
+		5E5F0FFF266602090016B91D /* MockApiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E5F0FFE266602090016B91D /* MockApiClient.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +56,7 @@
 		5E149A4D26649D7F00B660B3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5E149A672664BCFE00B660B3 /* ItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemView.swift; sourceTree = "<group>"; };
 		5E5F0FFB2665FA990016B91D /* ItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemViewModel.swift; sourceTree = "<group>"; };
+		5E5F0FFE266602090016B91D /* MockApiClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockApiClient.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +110,7 @@
 			isa = PBXGroup;
 			children = (
 				5E149A5A26649F0200B660B3 /* App */,
+				5E5F0FFD266601D40016B91D /* Network */,
 				5E149A5C26649F3900B660B3 /* Views */,
 				5E149A5B26649F1700B660B3 /* Supporting Files */,
 			);
@@ -160,6 +163,14 @@
 				5E5F0FFB2665FA990016B91D /* ItemViewModel.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		5E5F0FFD266601D40016B91D /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				5E5F0FFE266602090016B91D /* MockApiClient.swift */,
+			);
+			path = Network;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -303,6 +314,7 @@
 				5E149A2E26649D7B00B660B3 /* ViewController.swift in Sources */,
 				5E149A2A26649D7B00B660B3 /* AppDelegate.swift in Sources */,
 				5E149A2C26649D7B00B660B3 /* SceneDelegate.swift in Sources */,
+				5E5F0FFF266602090016B91D /* MockApiClient.swift in Sources */,
 				5E5F0FFC2665FA990016B91D /* ItemViewModel.swift in Sources */,
 				5E149A682664BCFE00B660B3 /* ItemView.swift in Sources */,
 			);

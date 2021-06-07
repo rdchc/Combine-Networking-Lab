@@ -22,7 +22,7 @@ This section enumerates some actual tasks for the project.
 
 - [X] Design and implement user interfaces
 
-- [ ] Create mock requests using asynchronous tasks
+- [X] Create mock requests using asynchronous tasks
 
 - [ ] Decide a source for free-of-charge APIs
 

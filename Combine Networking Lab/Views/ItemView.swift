@@ -86,10 +86,16 @@ class ItemView: UIView {
     
     fetchButton.do {
       $0.setTitle("Fetch", for: .normal)
+      $0.addAction(.init(handler: { [weak self] _ in
+        self?.viewModel.fetch()
+      }), for: .touchUpInside)
     }
     
     cancelButton.do {
       $0.setTitle("Cancel", for: .normal)
+      $0.addAction(.init(handler: { [weak self] _ in
+        self?.viewModel.cancel()
+      }), for: .touchUpInside)
     }
     
     separator.do {
@@ -115,11 +121,20 @@ class ItemView: UIView {
       .store(in: &subscriptions)
     
     viewModel.$status
+      .map {
+        switch $0 {
+        case .fetching: return "Fetching..."
+        case .fetched(let res): return res
+        case .error(let err): return err
+        case .cancelled: return "(Cancelled)"
+        case nil: return nil
+        }
+      }
       .assign(to: \.text, on: statusLabel)
       .store(in: &subscriptions)
     
-    viewModel.$isFetching
-      .map { !$0 }
+    viewModel.$status
+      .map { $0 != .fetching }
       .assign(to: \.isEnabled, on: fetchButton)
       .store(in: &subscriptions)
     
