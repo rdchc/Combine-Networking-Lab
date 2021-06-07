@@ -9,7 +9,15 @@ import Foundation
 import Combine
 import Then
 
-class ItemViewModel {
+protocol ItemViewModelProtocol {
+  var titlePublisher: Published<String?>.Publisher { get }
+  var statusPublisher: Published<ItemViewModel.Status?>.Publisher { get }
+  var cancellablePublisher: Published<Bool>.Publisher { get }
+  func fetch()
+  func cancel()
+}
+
+class ItemViewModel: ItemViewModelProtocol {
   enum Status: Equatable {
     case fetching
     case fetched(String?)
@@ -21,6 +29,10 @@ class ItemViewModel {
   @Published var status: Status?
   @Published var showError: Bool = false
   @Published var cancellable: Bool = false
+  
+  var titlePublisher: Published<String?>.Publisher { $title }
+  var statusPublisher: Published<Status?>.Publisher { $status }
+  var cancellablePublisher: Published<Bool>.Publisher { $cancellable }
   
   private var fetchSubscription: AnyCancellable?
   private var subscriptions = Set<AnyCancellable>()

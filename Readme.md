@@ -24,7 +24,7 @@ This section enumerates some actual tasks for the project.
 
 - [X] Create mock requests using asynchronous tasks
 
-- [ ] Decide a source for free-of-charge APIs
+- [X] Decide a source for free-of-charge APIs
 
 - [ ] Create network requests using `Combine` framework
 
@@ -43,6 +43,12 @@ Some use cases that can be implemented hopefully.
 - [ ] Cancel anytime by tapping buttons or after timeout
 
 - [ ] Disable fetching while in progress
+
+## API Source
+
+This project uses the Free Meal API from [TheMealDB.com](https://www.themealdb.com/api.php). This website provides a variety of free-of-charge APIs related to meals and recipes, including meal search by name, meal list in a specified category and random meals.
+
+For API key issue, since this project is experimental and will never go production, the test API key provided from the website is used according to the website's instructions.
 
 ## Useful Resources
 

@@ -16,7 +16,9 @@ class ViewController: UIViewController {
   private let scrollContentView = UIView()
   private let stackView = UIStackView()
   
+  // TODO: Make view model for view controller
   var itemViewModel0 = ItemViewModel()
+  var itemViewModel1 = MealItemViewModel()
   
   private let showInfoSubject = PassthroughSubject<String, Never>()
   private var subscriptions = Set<AnyCancellable>()
@@ -73,6 +75,21 @@ class ViewController: UIViewController {
         [errorSwitch, errorLabel].forEach { subview in
           v.customStackView.addArrangedSubview(subview)
         }
+        stackView.addArrangedSubview(v)
+      }
+    }
+    
+    itemViewModel1.do { vm in
+      vm.title = "Meal Categories"
+      
+      let infoBtn = UIButton(type: .system, primaryAction: .init(handler: { [weak self] _ in
+        guard let self = self else { return }
+        self.showInfoSubject.send("This item fetches all meal categories available.")
+      })).then { btn in
+        btn.setImage(UIImage(systemName: "info.circle"), for: .normal)
+      }
+      ItemView(viewModel: vm).do { v in
+        v.customStackView.addArrangedSubview(infoBtn)
         stackView.addArrangedSubview(v)
       }
     }

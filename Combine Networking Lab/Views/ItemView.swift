@@ -25,7 +25,7 @@ class ItemView: UIView {
   let customStackView = UIStackView()
   let insets: UIEdgeInsets = .uniform(12)
   
-  var viewModel: ItemViewModel
+  var viewModel: ItemViewModelProtocol
   private var subscriptions = Set<AnyCancellable>()
   
   
@@ -38,7 +38,7 @@ class ItemView: UIView {
     setupBindings()
   }
   
-  init(frame: CGRect = .zero, viewModel: ItemViewModel) {
+  init(frame: CGRect = .zero, viewModel: ItemViewModelProtocol) {
     self.viewModel = viewModel
     super.init(frame: frame)
     setupViews()
@@ -107,11 +107,11 @@ class ItemView: UIView {
   }
   
   private func setupBindings() {
-    viewModel.$title
+    viewModel.titlePublisher
       .assign(to: \.text, on: titleLabel)
       .store(in: &subscriptions)
     
-    viewModel.$status
+    viewModel.statusPublisher
       .map {
         switch $0 {
         case .fetching: return "Fetching..."
@@ -124,12 +124,12 @@ class ItemView: UIView {
       .assign(to: \.text, on: statusLabel)
       .store(in: &subscriptions)
     
-    viewModel.$status
+    viewModel.statusPublisher
       .map { $0 != .fetching }
       .assign(to: \.isEnabled, on: fetchButton)
       .store(in: &subscriptions)
     
-    viewModel.$cancellable
+    viewModel.cancellablePublisher
       .assign(to: \.isEnabled, on: cancelButton)
       .store(in: &subscriptions)
   }
