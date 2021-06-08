@@ -11,7 +11,6 @@ import Then
 import TinyConstraints
 
 class ItemView: UIView {
-  
   private let titleLabel = UILabel()
   private let statusLabel = UILabel()
   private let fetchButton = UIButton(type: .system)
@@ -25,24 +24,22 @@ class ItemView: UIView {
   let customStackView = UIStackView()
   let insets: UIEdgeInsets = .uniform(12)
   
-  var viewModel: ItemViewModelProtocol
+  private var fetchTappedSubject = PassthroughSubject<Void, Never>()
+  var fetchPublisher: AnyPublisher<Void, Never> {
+    fetchTappedSubject.eraseToAnyPublisher()
+  }
+  private var cancelTappedSubject = PassthroughSubject<Void, Never>()
+  var cancelPublisher: AnyPublisher<Void, Never> {
+    cancelTappedSubject.eraseToAnyPublisher()
+  }
   private var subscriptions = Set<AnyCancellable>()
   
   
   // MARK: - Methods
   
   override init(frame: CGRect) {
-    viewModel = ItemViewModel()
     super.init(frame: frame)
     setupViews()
-    setupBindings()
-  }
-  
-  init(frame: CGRect = .zero, viewModel: ItemViewModelProtocol) {
-    self.viewModel = viewModel
-    super.init(frame: frame)
-    setupViews()
-    setupBindings()
   }
   
   required init?(coder: NSCoder) {
@@ -86,14 +83,14 @@ class ItemView: UIView {
     fetchButton.do {
       $0.setTitle("Fetch", for: .normal)
       $0.addAction(.init(handler: { [weak self] _ in
-        self?.viewModel.fetch()
+        self?.fetchTappedSubject.send()
       }), for: .touchUpInside)
     }
     
     cancelButton.do {
       $0.setTitle("Cancel", for: .normal)
       $0.addAction(.init(handler: { [weak self] _ in
-        self?.viewModel.cancel()
+        self?.cancelTappedSubject.send()
       }), for: .touchUpInside)
     }
     
@@ -106,12 +103,12 @@ class ItemView: UIView {
     }
   }
   
-  private func setupBindings() {
-    viewModel.titlePublisher
+  func bindViewModel(_ vm: MockItemViewModel) {
+    vm.$title
       .assign(to: \.text, on: titleLabel)
       .store(in: &subscriptions)
     
-    viewModel.statusPublisher
+    vm.$status
       .map {
         switch $0 {
         case .fetching: return "Fetching..."
@@ -124,14 +121,39 @@ class ItemView: UIView {
       .assign(to: \.text, on: statusLabel)
       .store(in: &subscriptions)
     
-    viewModel.statusPublisher
+    vm.$status
       .map { $0 != .fetching }
       .assign(to: \.isEnabled, on: fetchButton)
       .store(in: &subscriptions)
     
-    viewModel.cancellablePublisher
+    vm.$cancellable
       .assign(to: \.isEnabled, on: cancelButton)
       .store(in: &subscriptions)
   }
   
+  func bindViewModel(_ vm: MealCategoriesItemViewModel) {
+    vm.$title
+      .assign(to: \.text, on: titleLabel)
+      .store(in: &subscriptions)
+    
+    vm.$status
+      .map {
+        switch $0 {
+        case .fetched(let res): return res
+        case .error(let err): return err
+        default: return "-"
+        }
+      }
+      .assign(to: \.text, on: statusLabel)
+      .store(in: &subscriptions)
+    
+    vm.$status
+      .map { $0 != .fetching }
+      .assign(to: \.isEnabled, on: fetchButton)
+      .store(in: &subscriptions)
+    
+    vm.$cancellable
+      .assign(to: \.isEnabled, on: cancelButton)
+      .store(in: &subscriptions)
+  }
 }

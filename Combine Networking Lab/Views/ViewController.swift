@@ -16,10 +16,10 @@ class ViewController: UIViewController {
   private let scrollContentView = UIView()
   private let stackView = UIStackView()
   
-  // TODO: Make view model for view controller
-  var itemViewModel0 = ItemViewModel()
-  var itemViewModel1 = MealItemViewModel()
+  let sampleItemView = ItemView()
+  let mealCategoriesItemView = ItemView()
   
+  let viewModel = ViewModel()
   private let showInfoSubject = PassthroughSubject<String, Never>()
   private var subscriptions = Set<AnyCancellable>()
   
@@ -51,36 +51,22 @@ class ViewController: UIViewController {
       $0.edgesToSuperview()
     }
     
-    // Sample item view
-    itemViewModel0.do { vm in
-      vm.title = "Sample Item View"
+    sampleItemView.do { v in
+      stackView.addArrangedSubview(v)
       
-      // Commented for example code.
-      // TODO: Remove when other item view use below code
-//      let infoBtn = UIButton(type: .system, primaryAction: .init(handler: { [weak self] _ in
-//        guard let self = self else { return }
-//        self.showInfoSubject.send("A sample view for UI implementations")
-//      })).then { btn in
-//        btn.setImage(UIImage(systemName: "info.circle"), for: .normal)
-//      }
-      
-      let errorSwitch = UISwitch(frame: .zero, primaryAction: .init(handler: { action in
-        guard let sender = action.sender as? UISwitch else { return }
-        vm.showError = sender.isOn
-      }))
+      let errorSwitch = UISwitch().then {
+        $0.addTarget(self, action: #selector(toggleShowMockError(_:)), for: .valueChanged)
+      }
       let errorLabel = UILabel().then {
         $0.text = "Toggle error"
       }
-      ItemView(viewModel: vm).do { v in
-        [errorSwitch, errorLabel].forEach { subview in
-          v.customStackView.addArrangedSubview(subview)
-        }
-        stackView.addArrangedSubview(v)
+      [errorSwitch, errorLabel].forEach { subview in
+        v.customStackView.addArrangedSubview(subview)
       }
     }
     
-    itemViewModel1.do { vm in
-      vm.title = "Meal Categories"
+    mealCategoriesItemView.do { v in
+      stackView.addArrangedSubview(v)
       
       let infoBtn = UIButton(type: .system, primaryAction: .init(handler: { [weak self] _ in
         guard let self = self else { return }
@@ -88,14 +74,43 @@ class ViewController: UIViewController {
       })).then { btn in
         btn.setImage(UIImage(systemName: "info.circle"), for: .normal)
       }
-      ItemView(viewModel: vm).do { v in
-        v.customStackView.addArrangedSubview(infoBtn)
-        stackView.addArrangedSubview(v)
-      }
+      v.customStackView.addArrangedSubview(infoBtn)
     }
   }
   
   private func setupBindings() {
+    sampleItemView.do { v in
+      v.bindViewModel(viewModel.mockItemViewModel)
+      v.fetchPublisher
+        .sink { [weak self] in
+          guard let self = self else { return }
+          self.viewModel.mockFetch()
+        }
+        .store(in: &subscriptions)
+      v.cancelPublisher
+        .sink { [weak self] in
+          guard let self = self else { return }
+          self.viewModel.cancelMockFetch()
+        }
+        .store(in: &subscriptions)
+    }
+    
+    mealCategoriesItemView.do { v in
+      v.bindViewModel(viewModel.categoriesItemViewModel)
+      v.fetchPublisher
+        .sink { [weak self] in
+          guard let self = self else { return }
+          self.viewModel.fetchCategories()
+        }
+        .store(in: &subscriptions)
+      v.cancelPublisher
+        .sink { [weak self] in
+          guard let self = self else { return }
+          self.viewModel.cancelFetchingCategories()
+        }
+        .store(in: &subscriptions)
+    }
+    
     showInfoSubject
       .sink { [weak self] info in
         let alert = UIAlertController(title: "Info", message: info, preferredStyle: .alert)
@@ -103,6 +118,13 @@ class ViewController: UIViewController {
         self?.present(alert, animated: true, completion: nil)
       }
       .store(in: &subscriptions)
+  }
+  
+  
+  // MARK: -
+  
+  @objc private func toggleShowMockError(_ sender: UISwitch) {
+    viewModel.showMockError(sender.isOn)
   }
 
 }

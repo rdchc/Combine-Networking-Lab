@@ -16,10 +16,6 @@ class MockApiClient {
   var error: Error?
   private let delay: TimeInterval = 2
   
-  init(error: Error?) {
-    self.error = error
-  }
-  
   func fetch() -> AnyPublisher<String?, MockApiClient.Error> {
     Future<String?, MockApiClient.Error> { [weak self] resolve in
       if let error = self?.error {
