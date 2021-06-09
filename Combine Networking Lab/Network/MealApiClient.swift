@@ -23,8 +23,24 @@ class MealApiClient {
     return urlSession.dataTaskPublisher(for: url)
       .map(\.data)
       .decode(type: MealCategoriesResponse.self, decoder: JSONDecoder())
-      .map { $0.categories.map { $0.mealCategory } }
+      .map { $0.categories.map { $0.toMealCategory() } }
       .mapError { error -> MealApiClient.Error in
+        switch error {
+        case let urlError as URLError: return .network(urlError)
+        case let decodingError as DecodingError: return .parsing(decodingError)
+        default: return .other(error)
+        }
+      }
+      .eraseToAnyPublisher()
+  }
+  
+  func fetchMeals(category: String) -> AnyPublisher<[Meal], MealApiClient.Error> {
+    let url = URL(string: "\(baseUrlString)/filter.php?c=\(category)")!
+    return urlSession.dataTaskPublisher(for: url)
+      .map(\.data)
+      .decode(type: MealsResponse.self, decoder: JSONDecoder())
+      .map { $0.meals.map { $0.toMeal() } }
+      .mapError { error -> MealApiClient.Error in // TODO: Make common `.mapError` specialized for `MealApiClient`
         switch error {
         case let urlError as URLError: return .network(urlError)
         case let decodingError as DecodingError: return .parsing(decodingError)
@@ -45,7 +61,21 @@ private struct MealCategoryResponse: Decodable {
   let strCategoryThumb: String
   let strCategoryDescription: String
   
-  var mealCategory: MealCategory {
+  func toMealCategory() -> MealCategory {
     MealCategory(id: idCategory, name: strCategory, imageUrlString: strCategoryThumb, longDescription: strCategoryDescription)
+  }
+}
+
+private struct MealsResponse: Decodable {
+  let meals: [MealResponse]
+}
+
+private struct MealResponse: Decodable {
+  let idMeal: String
+  let strMeal: String
+  let strMealThumb: String?
+  
+  func toMeal() -> Meal {
+    Meal(id: idMeal, name: strMeal, imageUrlString: strMealThumb)
   }
 }

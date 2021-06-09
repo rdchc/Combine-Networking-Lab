@@ -18,6 +18,8 @@ class ViewController: UIViewController {
   
   let sampleItemView = ItemView()
   let mealCategoriesItemView = ItemView()
+  let pastaItemView = ItemView()
+  let breakfastItemView = ItemView()
   
   let viewModel = ViewModel()
   private var subscriptions = Set<AnyCancellable>()
@@ -75,6 +77,14 @@ class ViewController: UIViewController {
       }
       v.customStackView.addArrangedSubview(infoBtn)
     }
+    
+    pastaItemView.do { v in
+      stackView.addArrangedSubview(v)
+    }
+    
+    breakfastItemView.do { v in
+      stackView.addArrangedSubview(v)
+    }
   }
   
   private func setupBindings() {
@@ -105,7 +115,39 @@ class ViewController: UIViewController {
       v.cancelPublisher
         .sink { [weak self] in
           guard let self = self else { return }
-          self.viewModel.cancelFetchingCategories()
+          self.viewModel.cancel()
+        }
+        .store(in: &subscriptions)
+    }
+    
+    pastaItemView.do { v in
+      v.bindViewModel(viewModel.pastaMealsItemViewModel)
+      v.fetchPublisher
+        .sink { [weak self] in
+          guard let self = self else { return }
+          self.viewModel.fetchPastaMeals()
+        }
+        .store(in: &subscriptions)
+      v.cancelPublisher
+        .sink { [weak self] in
+          guard let self = self else { return }
+          self.viewModel.cancel()
+        }
+        .store(in: &subscriptions)
+    }
+    
+    breakfastItemView.do { v in
+      v.bindViewModel(viewModel.breakfastMealsItemViewModel)
+      v.fetchPublisher
+        .sink { [weak self] in
+          guard let self = self else { return }
+          self.viewModel.fetchBreakfastMeals()
+        }
+        .store(in: &subscriptions)
+      v.cancelPublisher
+        .sink { [weak self] in
+          guard let self = self else { return }
+          self.viewModel.cancel()
         }
         .store(in: &subscriptions)
     }

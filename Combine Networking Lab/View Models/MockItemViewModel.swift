@@ -15,8 +15,6 @@ class MockItemViewModel {
   @Published var showError: Bool = false
   @Published private(set) var cancellable: Bool = false
   
-  private var subscriptions = Set<AnyCancellable>()
-  
   init() {
     setupBindings()
   }

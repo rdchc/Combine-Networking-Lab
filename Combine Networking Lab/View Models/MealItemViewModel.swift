@@ -1,5 +1,5 @@
 //
-//  MealCategoriesItemViewModel.swift
+//  MealItemViewModel.swift
 //  Combine Networking Lab
 //
 //  Created by CCH on 7/6/2021.
@@ -9,7 +9,7 @@ import Foundation
 import Combine
 import Then
 
-class MealCategoriesItemViewModel {
+class MealItemViewModel {
   @Published var title: String?
   @Published var status: FetchStatus<String?>?
   @Published var cancellable: Bool = false
@@ -28,4 +28,4 @@ class MealCategoriesItemViewModel {
 
 // MARK: - Then
 
-extension MealCategoriesItemViewModel: Then { }
+extension MealItemViewModel: Then { }

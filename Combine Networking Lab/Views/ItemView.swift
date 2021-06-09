@@ -131,7 +131,7 @@ class ItemView: UIView {
       .store(in: &subscriptions)
   }
   
-  func bindViewModel(_ vm: MealCategoriesItemViewModel) {
+  func bindViewModel(_ vm: MealItemViewModel) {
     vm.$title
       .assign(to: \.text, on: titleLabel)
       .store(in: &subscriptions)

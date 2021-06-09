@@ -26,7 +26,7 @@ This section enumerates some actual tasks for the project.
 
 - [X] Decide a source for free-of-charge APIs
 
-- [ ] Create network requests using `Combine` framework
+- [X] Create network requests using `Combine` framework
 
 - [ ] Create handy operators
 
@@ -36,19 +36,31 @@ This section enumerates some actual tasks for the project.
 
 Some use cases that can be implemented hopefully.
 
-- [ ] Fetch and show contents from external APIs
+- [X] Fetch and show contents from external APIs
 
-- [ ] Show error, with or without fallback contents, in case the API returns an error
+- [X] Show error, with or without fallback contents, in case the API returns an error
 
-- [ ] Cancel anytime by tapping buttons or after timeout
+- [X] Cancel anytime by tapping buttons
 
-- [ ] Disable fetching while in progress
+- [X] Disable re-fetching while in progress
 
 ## API Source
 
 This project uses the Free Meal API from [TheMealDB.com](https://www.themealdb.com/api.php). This website provides a variety of free-of-charge APIs related to meals and recipes, including meal search by name, meal list in a specified category and random meals.
 
 For API key issue, since this project is experimental and will never go production, the test API key provided from the website is used according to the website's instructions.
+
+## Findings
+
+Here are some findings during the exploration.
+
+### Cancellation
+
+In normal practice, we often create a bag of cancellables as `Set<AnyCancellable>` so that all subscriptions can be kept by strongly referencing them, except when you manually call `cancel()` to each instance inside, or when the class holding the set is deinitialized.
+
+If you want to cancel the previous subscription when subscribing a new one, assign all the related subscriptions into the same `AnyCancellable` instance.
+
+An example in the project is to keep fetching meal categories and meal list subscriptions into the same variable. In this way, a new meal API request will cancel the previous one since the previous subscription no longer has any strong reference.
 
 ## Useful Resources
 

@@ -10,12 +10,13 @@ import Combine
 
 class ViewModel {
   private(set) var mockItemViewModel = MockItemViewModel()
-  private(set) var categoriesItemViewModel = MealCategoriesItemViewModel()
+  private(set) var categoriesItemViewModel = MealItemViewModel()
+  private(set) var pastaMealsItemViewModel = MealItemViewModel()
+  private(set) var breakfastMealsItemViewModel = MealItemViewModel()
   
   var showInfoAlertSubject = PassthroughSubject<String?, Never>()
   
   private var mockFetchSubscription: AnyCancellable?
-  private var fetchMealCategoriesSubscription: AnyCancellable?
   private var sharedFetchSubscription: AnyCancellable?
   private var subscriptions = Set<AnyCancellable>()
   
@@ -42,6 +43,14 @@ class ViewModel {
     categoriesItemViewModel.do {
       $0.title = "Meal Categories"
     }
+    
+    pastaMealsItemViewModel.do {
+      $0.title = "Pasta Meals"
+    }
+    
+    breakfastMealsItemViewModel.do {
+      $0.title = "Breakfast Meals"
+    }
   }
   
   func cancel() {
@@ -54,7 +63,7 @@ class ViewModel {
   func fetchCategories() {
     categoriesItemViewModel.status = .fetching
     
-    fetchMealCategoriesSubscription = mealApiClient.fetchCategories()
+    sharedFetchSubscription = mealApiClient.fetchCategories()
       .receive(on: DispatchQueue.main)
       .handleEvents(receiveCancel: { [weak self] in
         self?.categoriesItemViewModel.status = .cancelled
@@ -71,12 +80,59 @@ class ViewModel {
           self?.categoriesItemViewModel.status = .error(message)
         }
       }, receiveValue: { [weak self] categories in
-        self?.categoriesItemViewModel.status = .fetched("\(categories.count) results")
+        self?.categoriesItemViewModel.status = .fetched("\(categories.count) categories")
       })
   }
   
-  func cancelFetchingCategories() {
-    fetchMealCategoriesSubscription?.cancel()
+  
+  // MARK: - Meals
+  
+  func fetchPastaMeals() {
+    pastaMealsItemViewModel.status = .fetching
+    
+    sharedFetchSubscription = mealApiClient.fetchMeals(category: "Pasta")
+      .receive(on: DispatchQueue.main)
+      .handleEvents(receiveCancel: { [weak self] in
+        self?.pastaMealsItemViewModel.status = .cancelled
+      })
+      .sink(receiveCompletion: { [weak self] in
+        if case .failure(let err) = $0 {
+          let message: String = {
+            switch err {
+            case .network: return "Network error occurred."
+            case .parsing: return "Unable to determine meals"
+            case .other: return "Error occurred, please try again."
+            }
+          }()
+          self?.pastaMealsItemViewModel.status = .error(message)
+        }
+      }, receiveValue: { [weak self] meals in
+        self?.pastaMealsItemViewModel.status = .fetched("\(meals.count) meals for pasta")
+      })
+  }
+  
+  func fetchBreakfastMeals() {
+    breakfastMealsItemViewModel.status = .fetching
+    
+    sharedFetchSubscription = mealApiClient.fetchMeals(category: "Breakfast")
+      .receive(on: DispatchQueue.main)
+      .handleEvents(receiveCancel: { [weak self] in
+        self?.breakfastMealsItemViewModel.status = .cancelled
+      })
+      .sink(receiveCompletion: { [weak self] in
+        if case .failure(let err) = $0 {
+          let message: String = {
+            switch err {
+            case .network: return "Network error occurred."
+            case .parsing: return "Unable to determine meals"
+            case .other: return "Error occurred, please try again."
+            }
+          }()
+          self?.breakfastMealsItemViewModel.status = .error(message)
+        }
+      }, receiveValue: { [weak self] meals in
+        self?.breakfastMealsItemViewModel.status = .fetched("\(meals.count) meals for breakfast")
+      })
   }
   
   
