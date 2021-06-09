@@ -12,6 +12,8 @@ class ViewModel {
   private(set) var mockItemViewModel = MockItemViewModel()
   private(set) var categoriesItemViewModel = MealCategoriesItemViewModel()
   
+  var showInfoAlertSubject = PassthroughSubject<String?, Never>()
+  
   private var mockFetchSubscription: AnyCancellable?
   private var fetchMealCategoriesSubscription: AnyCancellable?
   private var sharedFetchSubscription: AnyCancellable?

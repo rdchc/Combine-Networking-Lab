@@ -20,7 +20,6 @@ class ViewController: UIViewController {
   let mealCategoriesItemView = ItemView()
   
   let viewModel = ViewModel()
-  private let showInfoSubject = PassthroughSubject<String, Never>()
   private var subscriptions = Set<AnyCancellable>()
   
   
@@ -70,7 +69,7 @@ class ViewController: UIViewController {
       
       let infoBtn = UIButton(type: .system, primaryAction: .init(handler: { [weak self] _ in
         guard let self = self else { return }
-        self.showInfoSubject.send("This item fetches all meal categories available.")
+        self.viewModel.showInfoAlertSubject.send("This item fetches all meal categories available.")
       })).then { btn in
         btn.setImage(UIImage(systemName: "info.circle"), for: .normal)
       }
@@ -111,7 +110,7 @@ class ViewController: UIViewController {
         .store(in: &subscriptions)
     }
     
-    showInfoSubject
+    viewModel.showInfoAlertSubject
       .sink { [weak self] info in
         let alert = UIAlertController(title: "Info", message: info, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
