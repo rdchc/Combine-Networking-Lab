@@ -14,6 +14,7 @@ class ViewModel {
   private(set) var pastaMealsItemViewModel = MealItemViewModel()
   private(set) var breakfastMealsItemViewModel = MealItemViewModel()
   
+  @Published var showLoading: Bool = false
   var showInfoAlertSubject = PassthroughSubject<String?, Never>()
   
   private var mockFetchSubscription: AnyCancellable?
@@ -51,6 +52,14 @@ class ViewModel {
     breakfastMealsItemViewModel.do {
       $0.title = "Breakfast Meals"
     }
+    
+    Publishers.MergeMany([
+      categoriesItemViewModel.$status,
+      pastaMealsItemViewModel.$status,
+      breakfastMealsItemViewModel.$status
+    ])
+    .map { $0 == .fetching }
+    .assign(to: &$showLoading)
   }
   
   func cancel() {

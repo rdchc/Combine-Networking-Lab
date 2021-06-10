@@ -25,6 +25,7 @@
 		5E5F0FFF266602090016B91D /* MockApiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E5F0FFE266602090016B91D /* MockApiClient.swift */; };
 		5E6EA7C3266FBADD003245BF /* FetchStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E6EA7C2266FBADD003245BF /* FetchStatus.swift */; };
 		5E6EA7C5266FE38B003245BF /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E6EA7C4266FE38B003245BF /* ViewModel.swift */; };
+		5EB524D42671B9C100234F6A /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EB524D32671B9C100234F6A /* LoadingView.swift */; };
 		5ED4A5B926711AC900AA253C /* Meal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ED4A5B826711AC900AA253C /* Meal.swift */; };
 /* End PBXBuildFile section */
 
@@ -68,6 +69,7 @@
 		5E5F0FFE266602090016B91D /* MockApiClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockApiClient.swift; sourceTree = "<group>"; };
 		5E6EA7C2266FBADD003245BF /* FetchStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchStatus.swift; sourceTree = "<group>"; };
 		5E6EA7C4266FE38B003245BF /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		5EB524D32671B9C100234F6A /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		5ED4A5B826711AC900AA253C /* Meal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Meal.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -174,6 +176,7 @@
 				5E149A2F26649D7B00B660B3 /* Main.storyboard */,
 				5E149A2D26649D7B00B660B3 /* ViewController.swift */,
 				5E149A672664BCFE00B660B3 /* ItemView.swift */,
+				5EB524D32671B9C100234F6A /* LoadingView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -356,6 +359,7 @@
 				5E5F0FFF266602090016B91D /* MockApiClient.swift in Sources */,
 				5E5F0FFC2665FA990016B91D /* MockItemViewModel.swift in Sources */,
 				5E32ADE5266E0CC20078A2B5 /* MealItemViewModel.swift in Sources */,
+				5EB524D42671B9C100234F6A /* LoadingView.swift in Sources */,
 				5E149A682664BCFE00B660B3 /* ItemView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

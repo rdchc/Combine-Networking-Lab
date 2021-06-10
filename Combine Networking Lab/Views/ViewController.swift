@@ -15,6 +15,7 @@ class ViewController: UIViewController {
   private let scrollView = UIScrollView()
   private let scrollContentView = UIView()
   private let stackView = UIStackView()
+  private var loadingOverlayView: LoadingOverlayView?
   
   let sampleItemView = ItemView()
   let mealCategoriesItemView = ItemView()
@@ -152,6 +153,13 @@ class ViewController: UIViewController {
         .store(in: &subscriptions)
     }
     
+    viewModel.$showLoading
+      .sink { [weak self] showLoading in
+        guard let self = self else { return }
+        showLoading ? self.addLoadingOverlayView() : self.removeLoadingOverlayView()
+      }
+      .store(in: &subscriptions)
+    
     viewModel.showInfoAlertSubject
       .sink { [weak self] info in
         let alert = UIAlertController(title: "Info", message: info, preferredStyle: .alert)
@@ -159,6 +167,23 @@ class ViewController: UIViewController {
         self?.present(alert, animated: true, completion: nil)
       }
       .store(in: &subscriptions)
+  }
+  
+  private func addLoadingOverlayView() {
+    LoadingOverlayView().do {
+      view.addSubview($0)
+      $0.widthToSuperview()
+      $0.heightToSuperview()
+      loadingOverlayView = $0
+      
+      $0.loadingButton.addAction(.init(handler: { [weak self] _ in
+        self?.viewModel.cancel()
+      }), for: .touchUpInside)
+    }
+  }
+  
+  private func removeLoadingOverlayView() {
+    loadingOverlayView?.removeFromSuperview()
   }
   
   
