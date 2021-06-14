@@ -58,7 +58,7 @@ class ViewModel {
       pastaMealsItemViewModel.$status,
       breakfastMealsItemViewModel.$status
     ])
-    .map { $0 == .fetching }
+    .map { $0 == .ongoing }
     .assign(to: &$showLoading)
   }
   
@@ -70,26 +70,22 @@ class ViewModel {
   // MARK: - Meal categories
   
   func fetchCategories() {
-    categoriesItemViewModel.status = .fetching
+    categoriesItemViewModel.status = .ongoing
     
     sharedFetchSubscription = mealApiClient.fetchCategories()
       .receive(on: DispatchQueue.main)
       .handleEvents(receiveCancel: { [weak self] in
-        self?.categoriesItemViewModel.status = .cancelled
+        self?.categoriesItemViewModel.status = .ready
       })
       .sink(receiveCompletion: { [weak self] in
         if case .failure(let err) = $0 {
-          let message: String = {
-            switch err {
-            case .network: return "Network error occurred."
-            case .parsing: return "Unable to determine categories"
-            case .other: return "Error occurred, please try again."
-            }
-          }()
-          self?.categoriesItemViewModel.status = .error(message)
+          self?.showErrorAlert(err)
         }
       }, receiveValue: { [weak self] categories in
-        self?.categoriesItemViewModel.status = .fetched("\(categories.count) categories")
+        self?.categoriesItemViewModel.do {
+          $0.detail = "\(categories.count) categories"
+        }
+        self?.categoriesItemViewModel.status = .finished(())
       })
   }
   
@@ -97,75 +93,82 @@ class ViewModel {
   // MARK: - Meals
   
   func fetchPastaMeals() {
-    pastaMealsItemViewModel.status = .fetching
+    pastaMealsItemViewModel.status = .ongoing
     
     sharedFetchSubscription = mealApiClient.fetchMeals(category: "Pasta")
       .receive(on: DispatchQueue.main)
       .handleEvents(receiveCancel: { [weak self] in
-        self?.pastaMealsItemViewModel.status = .cancelled
+        self?.pastaMealsItemViewModel.status = .ready
       })
       .sink(receiveCompletion: { [weak self] in
         if case .failure(let err) = $0 {
-          let message: String = {
-            switch err {
-            case .network: return "Network error occurred."
-            case .parsing: return "Unable to determine meals"
-            case .other: return "Error occurred, please try again."
-            }
-          }()
-          self?.pastaMealsItemViewModel.status = .error(message)
+          self?.showErrorAlert(err)
         }
       }, receiveValue: { [weak self] meals in
-        self?.pastaMealsItemViewModel.status = .fetched("\(meals.count) meals for pasta")
+        self?.pastaMealsItemViewModel.do {
+          $0.detail = "\(meals.count) meals for pasta"
+          $0.status = .finished(())
+        }
       })
   }
   
   func fetchBreakfastMeals() {
-    breakfastMealsItemViewModel.status = .fetching
+    breakfastMealsItemViewModel.status = .ongoing
     
     sharedFetchSubscription = mealApiClient.fetchMeals(category: "Breakfast")
       .receive(on: DispatchQueue.main)
       .handleEvents(receiveCancel: { [weak self] in
-        self?.breakfastMealsItemViewModel.status = .cancelled
+        self?.breakfastMealsItemViewModel.status = .ready
       })
       .sink(receiveCompletion: { [weak self] in
         if case .failure(let err) = $0 {
-          let message: String = {
-            switch err {
-            case .network: return "Network error occurred."
-            case .parsing: return "Unable to determine meals"
-            case .other: return "Error occurred, please try again."
-            }
-          }()
-          self?.breakfastMealsItemViewModel.status = .error(message)
+          self?.showErrorAlert(err)
         }
       }, receiveValue: { [weak self] meals in
-        self?.breakfastMealsItemViewModel.status = .fetched("\(meals.count) meals for breakfast")
+        self?.breakfastMealsItemViewModel.do {
+          $0.detail = "\(meals.count) meals for breakfast"
+          $0.status = .finished(())
+        }
       })
+  }
+  
+  private func showErrorAlert(_ error: MealApiClient.Error) {
+    let message: String = {
+      switch error {
+      case .network: return "Network error occurred."
+      case .parsing: return "Unable to determine meals"
+      case .other: return "Error occurred, please try again."
+      }
+    }()
+    showInfoAlertSubject.send(message)
   }
   
   
   // MARK: - Mock
   
   func mockFetch() {
-    mockItemViewModel.status = .fetching
+    mockItemViewModel.status = .ongoing
     
     mockFetchSubscription = mockApiClient.fetch()
       .subscribe(on: mockApiQueue)
       .receive(on: DispatchQueue.main)
       .handleEvents(receiveCancel: { [weak self] in
-        self?.mockItemViewModel.status = .cancelled
+        self?.mockItemViewModel.status = .ready
       })
       .sink(receiveCompletion: { [weak self] in
         if case .failure(let err) = $0 {
-          switch err {
-          case .mockError:
-            self?.mockItemViewModel.status = .error("(Mock Error)")
-          }
+          self?.showErrorAlert(err)
         }
       }, receiveValue: { [weak self] str in
-        self?.mockItemViewModel.status = .fetched(str)
+        self?.mockItemViewModel.status = .finished(str)
       })
+  }
+  
+  private func showErrorAlert(_ error: MockApiClient.Error) {
+    switch error {
+    case .mockError:
+      mockItemViewModel.status = .finished("(Mock Error)")
+    }
   }
   
   func showMockError(_ showError: Bool) {

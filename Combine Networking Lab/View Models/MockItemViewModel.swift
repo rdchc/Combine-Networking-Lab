@@ -11,7 +11,7 @@ import Then
 
 class MockItemViewModel {
   @Published var title: String?
-  @Published var status: FetchStatus<String?>?
+  @Published var status: FetchStatus<String?> = .ready
   @Published var showError: Bool = false
   @Published private(set) var cancellable: Bool = false
   
@@ -21,7 +21,7 @@ class MockItemViewModel {
   
   private func setupBindings() {
     $status
-      .map { $0 == .fetching }
+      .map { $0 == .ongoing }
       .assign(to: &$cancellable)
   }
 }

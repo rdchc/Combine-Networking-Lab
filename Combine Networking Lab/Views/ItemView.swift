@@ -111,18 +111,16 @@ class ItemView: UIView {
     vm.$status
       .map {
         switch $0 {
-        case .fetching: return "Fetching..."
-        case .fetched(let res): return res
-        case .error(let err): return err
-        case .cancelled: return "(Cancelled)"
-        case nil: return nil
+        case .ready: return "Tap to fetch"
+        case .ongoing: return "Fetching..."
+        case .finished(let res): return res
         }
       }
       .assign(to: \.text, on: statusLabel)
       .store(in: &subscriptions)
     
     vm.$status
-      .map { $0 != .fetching }
+      .map { $0 != .ongoing }
       .assign(to: \.isEnabled, on: fetchButton)
       .store(in: &subscriptions)
     
@@ -136,19 +134,12 @@ class ItemView: UIView {
       .assign(to: \.text, on: titleLabel)
       .store(in: &subscriptions)
     
-    vm.$status
-      .map {
-        switch $0 {
-        case .fetched(let res): return res
-        case .error(let err): return err
-        default: return "-"
-        }
-      }
+    vm.$detail
       .assign(to: \.text, on: statusLabel)
       .store(in: &subscriptions)
     
     vm.$status
-      .map { $0 != .fetching }
+      .map { $0 != .ongoing }
       .assign(to: \.isEnabled, on: fetchButton)
       .store(in: &subscriptions)
     

@@ -7,22 +7,34 @@
 
 import Foundation
 
-enum FetchStatus<T: Equatable>: Equatable {
-  case fetching
-  case fetched(T)
-  case error(String?)
-  case cancelled
+enum FetchStatus<T>: Equatable {
+  case ready
+  case ongoing
+  case finished(T)
   
   static func == (lhs: FetchStatus<T>, rhs: FetchStatus<T>) -> Bool {
     switch (lhs, rhs) {
-    case (.fetching, .fetching):
+    case (.ready, .ready):
       return true
-    case let (.fetched(lValue), .fetched(rValue)):
+    case (.ongoing, .ongoing):
+      return true
+    case (.finished, .finished):
+      return true
+    default:
+      return false
+    }
+  }
+}
+
+extension FetchStatus where T: Equatable {
+  static func == (lhs: FetchStatus<T>, rhs: FetchStatus<T>) -> Bool {
+    switch (lhs, rhs) {
+    case (.ready, .ready):
+      return true
+    case (.ongoing, .ongoing):
+      return true
+    case let (.finished(lValue), .finished(rValue)):
       return lValue == rValue
-    case let (.error(lError), .error(rError)):
-      return lError == rError
-    case (.cancelled, .cancelled):
-      return true
     default:
       return false
     }

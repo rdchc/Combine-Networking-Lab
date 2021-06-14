@@ -11,7 +11,8 @@ import Then
 
 class MealItemViewModel {
   @Published var title: String?
-  @Published var status: FetchStatus<String?>?
+  @Published var detail: String?
+  @Published var status: FetchStatus<Void> = .ready
   @Published var cancellable: Bool = false
   
   init() {
@@ -20,7 +21,7 @@ class MealItemViewModel {
   
   private func setupBindings() {
     $status
-      .map { $0 == .fetching }
+      .map { $0 == .ongoing }
       .assign(to: &$cancellable)
   }
 }
