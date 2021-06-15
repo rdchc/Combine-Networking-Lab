@@ -21,14 +21,15 @@ class ViewModel {
   private var sharedFetchSubscription: AnyCancellable?
   private var subscriptions = Set<AnyCancellable>()
   
-  private let mealApiClient = MealAPIClient()
+  private let mealApiClient: MealAPIClientProtocol
   private let mockApiClient = MockAPIClient()
   private let mockApiQueue = DispatchQueue(label: "mock-api")
   
   
   // MARK: -
   
-  init() {
+  init(mealApiClient: MealAPIClientProtocol) {
+    self.mealApiClient = mealApiClient
     setupViewModels()
   }
   

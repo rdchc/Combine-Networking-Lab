@@ -22,7 +22,7 @@ class ViewController: UIViewController {
   let pastaItemView = ItemView()
   let breakfastItemView = ItemView()
   
-  let viewModel = ViewModel()
+  let viewModel = ViewModel(mealApiClient: MealAPIClient())
   private var subscriptions = Set<AnyCancellable>()
   
   
