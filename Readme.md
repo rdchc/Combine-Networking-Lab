@@ -30,7 +30,7 @@ This section enumerates some actual tasks for the project.
 
 - [ ] Create handy operators
 
-- [ ] Make unit tests for self-created functions
+- [X] Make unit tests for self-created functions
 
 ## Target Operations
 

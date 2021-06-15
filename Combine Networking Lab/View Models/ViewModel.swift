@@ -75,7 +75,11 @@ class ViewModel {
     
     sharedFetchSubscription = mealApiClient.fetchCategories()
       .receive(on: DispatchQueue.main)
-      .handleEvents(receiveCancel: { [weak self] in
+      .handleEvents(receiveCompletion: { [weak self] in
+        if case .failure = $0 {
+          self?.categoriesItemViewModel.status = .ready
+        }
+      }, receiveCancel: { [weak self] in
         self?.categoriesItemViewModel.status = .ready
       })
       .sink(receiveCompletion: { [weak self] in
@@ -98,7 +102,11 @@ class ViewModel {
     
     sharedFetchSubscription = mealApiClient.fetchMeals(category: "Pasta")
       .receive(on: DispatchQueue.main)
-      .handleEvents(receiveCancel: { [weak self] in
+      .handleEvents(receiveCompletion: { [weak self] in
+        if case .failure = $0 {
+          self?.pastaMealsItemViewModel.status = .ready
+        }
+      }, receiveCancel: { [weak self] in
         self?.pastaMealsItemViewModel.status = .ready
       })
       .sink(receiveCompletion: { [weak self] in
@@ -118,7 +126,11 @@ class ViewModel {
     
     sharedFetchSubscription = mealApiClient.fetchMeals(category: "Breakfast")
       .receive(on: DispatchQueue.main)
-      .handleEvents(receiveCancel: { [weak self] in
+      .handleEvents(receiveCompletion: { [weak self] in
+        if case .failure = $0 {
+          self?.breakfastMealsItemViewModel.status = .ready
+        }
+      }, receiveCancel: { [weak self] in
         self?.breakfastMealsItemViewModel.status = .ready
       })
       .sink(receiveCompletion: { [weak self] in
