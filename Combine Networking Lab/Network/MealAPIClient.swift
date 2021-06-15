@@ -1,5 +1,5 @@
 //
-//  MealApiClient.swift
+//  MealAPIClient.swift
 //  Combine Networking Lab
 //
 //  Created by CCH on 7/6/2021.
@@ -8,23 +8,22 @@
 import Foundation
 import Combine
 
-class MealApiClient {
-  enum Error: Swift.Error {
-    case network(URLError)
-    case parsing(DecodingError)
-    case other(Swift.Error)
-  }
-  
+protocol MealAPIClientProtocol {
+  func fetchCategories() -> AnyPublisher<[MealCategory], APIError>
+  func fetchMeals(category: String) -> AnyPublisher<[Meal], APIError>
+}
+
+class MealAPIClient: MealAPIClientProtocol {
   let baseUrlString = "https://www.themealdb.com/api/json/v1/1"
   let urlSession = URLSession.shared
   
-  func fetchCategories() -> AnyPublisher<[MealCategory], MealApiClient.Error> {
+  func fetchCategories() -> AnyPublisher<[MealCategory], APIError> {
     let url = URL(string: "\(baseUrlString)/categories.php")!
     return urlSession.dataTaskPublisher(for: url)
       .map(\.data)
       .decode(type: MealCategoriesResponse.self, decoder: JSONDecoder())
       .map { $0.categories.map { $0.toMealCategory() } }
-      .mapError { error -> MealApiClient.Error in
+      .mapError { error -> APIError in
         switch error {
         case let urlError as URLError: return .network(urlError)
         case let decodingError as DecodingError: return .parsing(decodingError)
@@ -34,13 +33,13 @@ class MealApiClient {
       .eraseToAnyPublisher()
   }
   
-  func fetchMeals(category: String) -> AnyPublisher<[Meal], MealApiClient.Error> {
+  func fetchMeals(category: String) -> AnyPublisher<[Meal], APIError> {
     let url = URL(string: "\(baseUrlString)/filter.php?c=\(category)")!
     return urlSession.dataTaskPublisher(for: url)
       .map(\.data)
       .decode(type: MealsResponse.self, decoder: JSONDecoder())
       .map { $0.meals.map { $0.toMeal() } }
-      .mapError { error -> MealApiClient.Error in // TODO: Make common `.mapError` specialized for `MealApiClient`
+      .mapError { error -> APIError in // TODO: Make common `.mapError` specialized for `MealApiClient`
         switch error {
         case let urlError as URLError: return .network(urlError)
         case let decodingError as DecodingError: return .parsing(decodingError)

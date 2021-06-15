@@ -1,5 +1,5 @@
 //
-//  MockApiClient.swift
+//  MockAPIClient.swift
 //  Combine Networking Lab
 //
 //  Created by CCH on 1/6/2021.
@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-class MockApiClient {
+class MockAPIClient {
   enum Error: Swift.Error {
     case mockError
   }
@@ -16,8 +16,8 @@ class MockApiClient {
   var error: Error?
   private let delay: TimeInterval = 2
   
-  func fetch() -> AnyPublisher<String?, MockApiClient.Error> {
-    Future<String?, MockApiClient.Error> { [weak self] resolve in
+  func fetch() -> AnyPublisher<String?, MockAPIClient.Error> {
+    Future<String?, MockAPIClient.Error> { [weak self] resolve in
       if let error = self?.error {
         resolve(.failure(error))
       } else {

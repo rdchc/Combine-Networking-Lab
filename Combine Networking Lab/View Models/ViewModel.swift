@@ -21,8 +21,8 @@ class ViewModel {
   private var sharedFetchSubscription: AnyCancellable?
   private var subscriptions = Set<AnyCancellable>()
   
-  private let mealApiClient = MealApiClient()
-  private let mockApiClient = MockApiClient()
+  private let mealApiClient = MealAPIClient()
+  private let mockApiClient = MockAPIClient()
   private let mockApiQueue = DispatchQueue(label: "mock-api")
   
   
@@ -36,7 +36,7 @@ class ViewModel {
     mockItemViewModel.do {
       $0.title = "Sample Item View"
       $0.$showError
-        .map { $0 ? MockApiClient.Error.mockError : nil }
+        .map { $0 ? MockAPIClient.Error.mockError : nil }
         .assign(to: \.error, on: mockApiClient)
         .store(in: &subscriptions)
     }
@@ -132,15 +132,8 @@ class ViewModel {
       })
   }
   
-  private func showErrorAlert(_ error: MealApiClient.Error) {
-    let message: String = {
-      switch error {
-      case .network: return "Network error occurred."
-      case .parsing: return "Unable to determine meals"
-      case .other: return "Error occurred, please try again."
-      }
-    }()
-    showInfoAlertSubject.send(message)
+  private func showErrorAlert(_ error: APIError) {
+    showInfoAlertSubject.send(error.localizedDescription)
   }
   
   
@@ -164,7 +157,7 @@ class ViewModel {
       })
   }
   
-  private func showErrorAlert(_ error: MockApiClient.Error) {
+  private func showErrorAlert(_ error: MockAPIClient.Error) {
     switch error {
     case .mockError:
       mockItemViewModel.status = .finished("(Mock Error)")
