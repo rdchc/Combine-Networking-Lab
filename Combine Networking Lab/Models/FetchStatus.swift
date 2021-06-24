@@ -7,36 +7,8 @@
 
 import Foundation
 
-enum FetchStatus<T>: Equatable {
+enum FetchStatus: Equatable {
   case ready
   case ongoing
-  case finished(T)
-  
-  static func == (lhs: FetchStatus<T>, rhs: FetchStatus<T>) -> Bool {
-    switch (lhs, rhs) {
-    case (.ready, .ready):
-      return true
-    case (.ongoing, .ongoing):
-      return true
-    case (.finished, .finished):
-      return true
-    default:
-      return false
-    }
-  }
-}
-
-extension FetchStatus where T: Equatable {
-  static func == (lhs: FetchStatus<T>, rhs: FetchStatus<T>) -> Bool {
-    switch (lhs, rhs) {
-    case (.ready, .ready):
-      return true
-    case (.ongoing, .ongoing):
-      return true
-    case let (.finished(lValue), .finished(rValue)):
-      return lValue == rValue
-    default:
-      return false
-    }
-  }
+  case finished
 }

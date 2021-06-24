@@ -11,7 +11,8 @@ import Then
 
 class MockItemViewModel {
   @Published var title: String?
-  @Published var status: FetchStatus<String?> = .ready
+  @Published var content: String?
+  @Published var status: FetchStatus = .ready
   @Published var showError: Bool = false
   @Published private(set) var cancellable: Bool = false
   

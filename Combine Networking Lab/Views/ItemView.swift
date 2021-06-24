@@ -108,12 +108,17 @@ class ItemView: UIView {
       .assign(to: \.text, on: titleLabel)
       .store(in: &subscriptions)
     
-    vm.$status
-      .map {
-        switch $0 {
-        case .ready: return "Tap to fetch"
-        case .ongoing: return "Fetching..."
-        case .finished(let res): return res
+    vm.$content
+      .combineLatest(vm.$status)
+      .map { (content, status) -> String? in
+        if let content = content {
+          return content
+        } else {
+          switch status {
+          case .ready: return "Tap to fetch"
+          case .ongoing: return "Fetching..."
+          case .finished: return nil // `content` should be returned in this case
+          }
         }
       }
       .assign(to: \.text, on: statusLabel)
@@ -138,7 +143,7 @@ class ItemView: UIView {
       .assign(to: \.text, on: statusLabel)
       .store(in: &subscriptions)
     
-    vm.$status
+    vm.statusSubject
       .map { $0 != .ongoing }
       .assign(to: \.isEnabled, on: fetchButton)
       .store(in: &subscriptions)

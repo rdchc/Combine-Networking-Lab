@@ -35,9 +35,9 @@ class ViewModelTests: XCTestCase {
   
   func testUpdateFetchCategoriesStatusWhenFetch() {
     // Given
-    let expected = FetchStatus<Void>.ongoing
-    var result: FetchStatus<Void> = .ready
-    sut.categoriesItemViewModel.$status
+    let expected: FetchStatus = .ongoing
+    var result: FetchStatus = .ready
+    sut.categoriesItemViewModel.statusSubject
       .dropFirst()
       .sink(receiveValue: { result = $0 })
       .store(in: &subscriptions)
@@ -51,9 +51,9 @@ class ViewModelTests: XCTestCase {
   
   func testUpdatePastaMealStatusWhenFetch() {
     // Given
-    let expected = FetchStatus<Void>.ongoing
-    var result: FetchStatus<Void> = .ready
-    sut.pastaMealsItemViewModel.$status
+    let expected: FetchStatus = .ongoing
+    var result: FetchStatus = .ready
+    sut.pastaMealsItemViewModel.statusSubject
       .dropFirst()
       .sink(receiveValue: { result = $0 })
       .store(in: &subscriptions)
@@ -67,9 +67,9 @@ class ViewModelTests: XCTestCase {
   
   func testUpdateBreakfastMealStatusWhenFetch() {
     // Given
-    let expected = FetchStatus<Void>.ongoing
-    var result: FetchStatus<Void> = .ready
-    sut.breakfastMealsItemViewModel.$status
+    let expected: FetchStatus = .ongoing
+    var result: FetchStatus = .ready
+    sut.breakfastMealsItemViewModel.statusSubject
       .dropFirst()
       .sink(receiveValue: { result = $0 })
       .store(in: &subscriptions)
@@ -91,9 +91,9 @@ class ViewModelTests: XCTestCase {
       expectation.fulfill()
     }
     
-    let expectedStatus = FetchStatus<Void>.finished(())
-    var resultStatus: FetchStatus<Void> = .ready
-    sut.categoriesItemViewModel.$status
+    let expectedStatus: FetchStatus = .finished
+    var resultStatus: FetchStatus = .ready
+    sut.categoriesItemViewModel.statusSubject
       .dropFirst()
       .sink(receiveValue: { resultStatus = $0 })
       .store(in: &subscriptions)
@@ -121,9 +121,9 @@ class ViewModelTests: XCTestCase {
       expectation.fulfill()
     }
     
-    let expectedStatus = FetchStatus<Void>.finished(())
-    var resultStatus: FetchStatus<Void> = .ready
-    sut.pastaMealsItemViewModel.$status
+    let expectedStatus: FetchStatus = .finished
+    var resultStatus: FetchStatus = .ready
+    sut.pastaMealsItemViewModel.statusSubject
       .dropFirst()
       .sink(receiveValue: { resultStatus = $0 })
       .store(in: &subscriptions)
@@ -151,9 +151,9 @@ class ViewModelTests: XCTestCase {
       expectation.fulfill()
     }
     
-    let expectedStatus = FetchStatus<Void>.finished(())
-    var resultStatus: FetchStatus<Void> = .ready
-    sut.breakfastMealsItemViewModel.$status
+    let expectedStatus: FetchStatus = .finished
+    var resultStatus: FetchStatus = .ready
+    sut.breakfastMealsItemViewModel.statusSubject
       .dropFirst()
       .sink(receiveValue: { resultStatus = $0 })
       .store(in: &subscriptions)
@@ -186,9 +186,9 @@ class ViewModelTests: XCTestCase {
       expectation.fulfill()
     }
     
-    let expectedStatus = FetchStatus<Void>.ready
-    var resultStatus: FetchStatus<Void> = .ready
-    sut.categoriesItemViewModel.$status
+    let expectedStatus: FetchStatus = .ready
+    var resultStatus: FetchStatus = .ready
+    sut.categoriesItemViewModel.statusSubject
       .dropFirst()
       .sink(receiveValue: { resultStatus = $0 })
       .store(in: &subscriptions)
@@ -217,9 +217,9 @@ class ViewModelTests: XCTestCase {
       expectation.fulfill()
     }
     
-    let expectedStatus = FetchStatus<Void>.ready
-    var resultStatus: FetchStatus<Void> = .ready
-    sut.pastaMealsItemViewModel.$status
+    let expectedStatus: FetchStatus = .ready
+    var resultStatus: FetchStatus = .ready
+    sut.pastaMealsItemViewModel.statusSubject
       .dropFirst()
       .sink(receiveValue: { resultStatus = $0 })
       .store(in: &subscriptions)
@@ -248,9 +248,9 @@ class ViewModelTests: XCTestCase {
       expectation.fulfill()
     }
     
-    let expectedStatus = FetchStatus<Void>.ready
-    var resultStatus: FetchStatus<Void> = .ready
-    sut.breakfastMealsItemViewModel.$status
+    let expectedStatus: FetchStatus = .ready
+    var resultStatus: FetchStatus = .ready
+    sut.breakfastMealsItemViewModel.statusSubject
       .dropFirst()
       .sink(receiveValue: { resultStatus = $0 })
       .store(in: &subscriptions)
@@ -282,9 +282,9 @@ class ViewModelTests: XCTestCase {
       expectation.fulfill()
     }
     
-    let expectedStatus = FetchStatus<Void>.ready
-    var resultStatus: FetchStatus<Void> = .ongoing
-    sut.categoriesItemViewModel.$status
+    let expectedStatus: FetchStatus = .ready
+    var resultStatus: FetchStatus = .ongoing
+    sut.categoriesItemViewModel.statusSubject
       .sink(receiveValue: { resultStatus = $0 })
       .store(in: &subscriptions)
     
@@ -315,9 +315,9 @@ class ViewModelTests: XCTestCase {
       expectation.fulfill()
     }
     
-    let expectedStatus = FetchStatus<Void>.ready
-    var resultStatus: FetchStatus<Void> = .ongoing
-    sut.pastaMealsItemViewModel.$status
+    let expectedStatus: FetchStatus = .ready
+    var resultStatus: FetchStatus = .ongoing
+    sut.pastaMealsItemViewModel.statusSubject
       .sink(receiveValue: { resultStatus = $0 })
       .store(in: &subscriptions)
     
@@ -348,9 +348,9 @@ class ViewModelTests: XCTestCase {
       expectation.fulfill()
     }
     
-    let expectedStatus = FetchStatus<Void>.ready
-    var resultStatus: FetchStatus<Void> = .ongoing
-    sut.breakfastMealsItemViewModel.$status
+    let expectedStatus: FetchStatus = .ready
+    var resultStatus: FetchStatus = .ongoing
+    sut.breakfastMealsItemViewModel.statusSubject
       .sink(receiveValue: { resultStatus = $0 })
       .store(in: &subscriptions)
     
