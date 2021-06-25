@@ -105,6 +105,7 @@ class ItemView: UIView {
   
   func bindViewModel(_ vm: MockItemViewModel) {
     vm.$title
+      .receive(on: DispatchQueue.main)
       .assign(to: \.text, on: titleLabel)
       .store(in: &subscriptions)
     
@@ -121,34 +122,41 @@ class ItemView: UIView {
           }
         }
       }
+      .receive(on: DispatchQueue.main)
       .assign(to: \.text, on: statusLabel)
       .store(in: &subscriptions)
     
     vm.$status
       .map { $0 != .ongoing }
+      .receive(on: DispatchQueue.main)
       .assign(to: \.isEnabled, on: fetchButton)
       .store(in: &subscriptions)
     
     vm.$cancellable
+      .receive(on: DispatchQueue.main)
       .assign(to: \.isEnabled, on: cancelButton)
       .store(in: &subscriptions)
   }
   
   func bindViewModel(_ vm: MealItemViewModel) {
     vm.$title
+      .receive(on: DispatchQueue.main)
       .assign(to: \.text, on: titleLabel)
       .store(in: &subscriptions)
     
     vm.$detail
+      .receive(on: DispatchQueue.main)
       .assign(to: \.text, on: statusLabel)
       .store(in: &subscriptions)
     
     vm.statusSubject
       .map { $0 != .ongoing }
+      .receive(on: DispatchQueue.main)
       .assign(to: \.isEnabled, on: fetchButton)
       .store(in: &subscriptions)
     
     vm.$cancellable
+      .receive(on: DispatchQueue.main)
       .assign(to: \.isEnabled, on: cancelButton)
       .store(in: &subscriptions)
   }

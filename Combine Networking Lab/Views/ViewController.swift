@@ -154,6 +154,7 @@ class ViewController: UIViewController {
     }
     
     viewModel.$showLoading
+      .receive(on: DispatchQueue.main)
       .sink { [weak self] showLoading in
         guard let self = self else { return }
         showLoading ? self.addLoadingOverlayView() : self.removeLoadingOverlayView()
@@ -161,6 +162,7 @@ class ViewController: UIViewController {
       .store(in: &subscriptions)
     
     viewModel.showInfoAlertSubject
+      .receive(on: DispatchQueue.main)
       .sink { [weak self] info in
         let alert = UIAlertController(title: "Info", message: info, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))

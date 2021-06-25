@@ -72,7 +72,6 @@ class ViewModel {
   
   func fetchCategories() {
     sharedFetchSubscription = mealApiClient.fetchCategories()
-      .receive(on: DispatchQueue.main)
       .observeFetchStatus(with: categoriesItemViewModel.statusSubject)
       .sink(receiveCompletion: { [weak self] in
         if case .failure(let err) = $0 {
@@ -90,7 +89,6 @@ class ViewModel {
   
   func fetchPastaMeals() {
     sharedFetchSubscription = mealApiClient.fetchMeals(category: "Pasta")
-      .receive(on: DispatchQueue.main)
       .observeFetchStatus(with: pastaMealsItemViewModel.statusSubject)
       .sink(receiveCompletion: { [weak self] in
         if case .failure(let err) = $0 {
@@ -105,7 +103,6 @@ class ViewModel {
   
   func fetchBreakfastMeals() {
     sharedFetchSubscription = mealApiClient.fetchMeals(category: "Breakfast")
-      .receive(on: DispatchQueue.main)
       .observeFetchStatus(with: breakfastMealsItemViewModel.statusSubject)
       .sink(receiveCompletion: { [weak self] in
         if case .failure(let err) = $0 {
@@ -126,15 +123,14 @@ class ViewModel {
   // MARK: - Mock
   
   func mockFetch() {
-    mockItemViewModel.do { // TODO: Move to `receiveSubscription` block using suitable thread
-      $0.content = nil
-      $0.status = .ongoing
-    }
-    
     mockFetchSubscription = mockApiClient.fetch()
       .subscribe(on: mockApiQueue)
-      .receive(on: DispatchQueue.main)
-      .handleEvents(receiveCompletion: { [weak self] in
+      .handleEvents(receiveSubscription: { [weak self] _ in
+        self?.mockItemViewModel.do {
+          $0.content = nil
+          $0.status = .ongoing
+        }
+      }, receiveCompletion: { [weak self] in
         switch $0 {
         case .finished:
           self?.mockItemViewModel.status = .finished
