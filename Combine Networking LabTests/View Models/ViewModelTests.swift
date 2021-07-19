@@ -179,7 +179,7 @@ class ViewModelTests: XCTestCase {
   
   func testFetchCategoriesFailed() {
     // Given
-    mockMealAPIClient.error = .other( MockMealAPIClient.Error.mockError)
+    mockMealAPIClient.error = .mockError
     
     let expectation = self.expectation(description: #function)
     DispatchQueue.main.asyncAfter(deadline: .now() + mockMealAPIClient.delay) {
@@ -210,7 +210,7 @@ class ViewModelTests: XCTestCase {
 
   func testFetchPastaMealsFailed() {
     // Given
-    mockMealAPIClient.error = .other( MockMealAPIClient.Error.mockError)
+    mockMealAPIClient.error = .mockError
     
     let expectation = self.expectation(description: #function)
     DispatchQueue.main.asyncAfter(deadline: .now() + mockMealAPIClient.delay) {
@@ -241,7 +241,7 @@ class ViewModelTests: XCTestCase {
 
   func testFetchBreakfastMealsFailed() {
     // Given
-    mockMealAPIClient.error = .other( MockMealAPIClient.Error.mockError)
+    mockMealAPIClient.error = .mockError
     
     let expectation = self.expectation(description: #function)
     DispatchQueue.main.asyncAfter(deadline: .now() + mockMealAPIClient.delay) {
@@ -275,7 +275,7 @@ class ViewModelTests: XCTestCase {
   
   func testFetchCategoriesCancelled() {
     // Given
-    mockMealAPIClient.error = .other( MockMealAPIClient.Error.mockError)
+    mockMealAPIClient.error = .mockError
     
     let expectation = self.expectation(description: #function)
     DispatchQueue.main.asyncAfter(deadline: .now() + mockMealAPIClient.delay) {
@@ -308,7 +308,7 @@ class ViewModelTests: XCTestCase {
   
   func testFetchPastaMealsCancelled() {
     // Given
-    mockMealAPIClient.error = .other( MockMealAPIClient.Error.mockError)
+    mockMealAPIClient.error = .mockError
     
     let expectation = self.expectation(description: #function)
     DispatchQueue.main.asyncAfter(deadline: .now() + mockMealAPIClient.delay) {
@@ -341,7 +341,7 @@ class ViewModelTests: XCTestCase {
   
   func testFetchBreakfastMealsCancelled() {
     // Given
-    mockMealAPIClient.error = .other( MockMealAPIClient.Error.mockError)
+    mockMealAPIClient.error = .mockError
     
     let expectation = self.expectation(description: #function)
     DispatchQueue.main.asyncAfter(deadline: .now() + mockMealAPIClient.delay) {
@@ -391,11 +391,11 @@ private class MockMealAPIClient: MealAPIClientProtocol {
     Meal(id: "1", name: "Meal 1", imageUrlString: nil)
   ]
   
-  var error: APIError?
+  var error: Error?
   let delay: TimeInterval = 1
   
-  func fetchCategories() -> AnyPublisher<[MealCategory], APIError> {
-    Future<[MealCategory], APIError> { [weak self] resolve in
+  func fetchCategories() -> AnyPublisher<[MealCategory], Swift.Error> {
+    Future<[MealCategory], Swift.Error> { [weak self] resolve in
       guard let self = self else { return }
       if let error = self.error {
         resolve(.failure(error))
@@ -407,8 +407,8 @@ private class MockMealAPIClient: MealAPIClientProtocol {
     .eraseToAnyPublisher()
   }
   
-  func fetchMeals(category: String) -> AnyPublisher<[Meal], APIError> {
-    Future<[Meal], APIError> { [weak self] resolve in
+  func fetchMeals(category: String) -> AnyPublisher<[Meal], Swift.Error> {
+    Future<[Meal], Swift.Error> { [weak self] resolve in
       guard let self = self else { return }
       if let error = self.error {
         resolve(.failure(error))

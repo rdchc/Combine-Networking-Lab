@@ -75,7 +75,7 @@ class ViewModel {
       .observeFetchStatus(with: categoriesItemViewModel.statusSubject)
       .sink(receiveCompletion: { [weak self] in
         if case .failure(let err) = $0 {
-          self?.showErrorAlert(err)
+          self?.handleError(err)
         }
       }, receiveValue: { [weak self] categories in
         self?.categoriesItemViewModel.do {
@@ -92,7 +92,7 @@ class ViewModel {
       .observeFetchStatus(with: pastaMealsItemViewModel.statusSubject)
       .sink(receiveCompletion: { [weak self] in
         if case .failure(let err) = $0 {
-          self?.showErrorAlert(err)
+          self?.handleError(err)
         }
       }, receiveValue: { [weak self] meals in
         self?.pastaMealsItemViewModel.do {
@@ -106,7 +106,7 @@ class ViewModel {
       .observeFetchStatus(with: breakfastMealsItemViewModel.statusSubject)
       .sink(receiveCompletion: { [weak self] in
         if case .failure(let err) = $0 {
-          self?.showErrorAlert(err)
+          self?.handleError(err)
         }
       }, receiveValue: { [weak self] meals in
         self?.breakfastMealsItemViewModel.do {
@@ -115,8 +115,19 @@ class ViewModel {
       })
   }
   
-  private func showErrorAlert(_ error: APIError) {
-    showInfoAlertSubject.send(error.localizedDescription)
+  private func handleError(_ error: Error) {
+    print(error.localizedDescription)
+    let errorDescription: String = {
+      switch error {
+      case is URLError:
+        return "Network error occurred."
+      case is DecodingError:
+        return "Unable to determine data."
+      default:
+        return "Error occurred, please try again."
+      }
+    }()
+    showInfoAlertSubject.send(errorDescription)
   }
   
   
