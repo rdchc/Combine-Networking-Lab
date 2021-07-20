@@ -2,19 +2,7 @@
 
 A lab project to try out using reactive programming with `Combine` framework for network tasks.
 
-## Objectives
-
-This section lists out the main objectives of this lab project.
-
-- Simulate network requests by asynchronous tasks as the first step
-
-- Explore how common network-related tasks (in later section) can be performed using `Combine` framework
-
-- Improve codes in the process for efficiency
-
-- Create handy operators for network tasks
-
-- Find out and recommend useful resources
+For more background information, please check out my separate [Medium article](https://medium.com/@rdchc/my-combine-networking-lab-project-86c63404ca7c).
 
 ## Tasks
 
@@ -28,7 +16,7 @@ This section enumerates some actual tasks for the project.
 
 - [X] Create network requests using `Combine` framework
 
-- [ ] Create handy operators
+- [X] Create handy operators
 
 - [X] Make unit tests for self-created functions
 
@@ -52,18 +40,10 @@ For API key issue, since this project is experimental and will never go producti
 
 ## Findings
 
-Here are some findings during the exploration.
-
-### Cancellation
-
-In normal practice, we often create a bag of cancellables as `Set<AnyCancellable>` so that all subscriptions can be kept by strongly referencing them, except when you manually call `cancel()` to each instance inside, or when the class holding the set is deinitialized.
-
-If you want to cancel the previous subscription when subscribing a new one, assign all the related subscriptions into the same `AnyCancellable` instance.
-
-An example in the project is to keep fetching meal categories and meal list subscriptions into the same variable. In this way, a new meal API request will cancel the previous one since the previous subscription no longer has any strong reference.
+Please refer to the [Medium article](https://medium.com/@rdchc/making-network-requests-using-combine-framework-ff34151611db) about my findings on making network requests as well as handling loading states and cancellations.
 
 ## Useful Resources
 
-Some websites, books or tutorials for reference for creating network requests.
+Some websites, books or tutorials for references for network tasks.
 
 - *Combine: Asynchronous Programming with Swift* (2nd edition, 2020) by Florent Pillet, Shai Mishali, Scott Gardner and Marin Todorov. Accessible in [raywenderlich.com](http://raywenderlich.com/books/combine-asynchronous-programming-with-swift/). Free of charge for limited version.
