@@ -9,6 +9,26 @@ import Foundation
 import Combine
 
 extension Publisher {
+  func observeFetchStatus(with countSubject: CurrentValueSubject<Int, Never>) -> Publishers.HandleEvents<Self> {
+    return handleEvents(receiveSubscription: { _ in
+      countSubject.value += 1
+    }, receiveCompletion: { _ in
+      countSubject.value -= 1
+    }, receiveCancel: {
+      countSubject.value -= 1
+    })
+  }
+  
+  func observeFetchStatus<S: Subject>(with booleanSubject: S) -> Publishers.HandleEvents<Self> where S.Output == Bool, S.Failure == Never {
+    return handleEvents(receiveSubscription: { _ in
+      booleanSubject.send(true)
+    }, receiveCompletion: { _ in
+      booleanSubject.send(false)
+    }, receiveCancel: {
+      booleanSubject.send(false)
+    })
+  }
+  
   func observeFetchStatus<S: Subject>(with fetchStatusSubject: S) -> Publishers.HandleEvents<Self> where S.Output == FetchStatus, S.Failure == Never {
     return handleEvents(receiveSubscription: { _ in
       fetchStatusSubject.send(.ongoing)

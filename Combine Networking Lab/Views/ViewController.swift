@@ -154,6 +154,7 @@ class ViewController: UIViewController {
     }
     
     viewModel.$showLoading
+      .removeDuplicates()
       .receive(on: DispatchQueue.main)
       .sink { [weak self] showLoading in
         guard let self = self else { return }
